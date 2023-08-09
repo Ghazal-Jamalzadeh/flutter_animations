@@ -13,15 +13,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
         primarySwatch: Colors.blue,
       ),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
@@ -32,22 +23,14 @@ class MyApp extends StatelessWidget {
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
 
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
   final String title;
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage>
+    with SingleTickerProviderStateMixin {
   //fade out
   double opacity = 1;
 
@@ -56,10 +39,30 @@ class _MyHomePageState extends State<MyHomePage> {
   double left = 0;
 
   //rotate
-  double turns = 1 ;
+  double turns = 1;
 
   //scale
-  double scale = 1 ;
+  double scale = 1;
+
+  //Animation Controller
+  late final AnimationController animationController =
+      AnimationController(vsync: this, duration: const Duration(seconds: 1))..repeat();
+
+/*  @override
+  void initState() {
+    animationController.addListener(() {
+      setState(() {
+
+      });
+    });
+    super.initState();
+  }*/
+
+  @override
+  void dispose() {
+    animationController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -128,7 +131,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         color: Colors.deepOrange,
                         borderRadius: BorderRadius.circular(16)),
                   ),
-                ) ,
+                ),
                 const SizedBox(
                   height: 16,
                 ),
@@ -143,6 +146,23 @@ class _MyHomePageState extends State<MyHomePage> {
                         color: Colors.purple,
                         borderRadius: BorderRadius.circular(16)),
                   ),
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                /* Opacity using Animation Controller */
+                AnimatedBuilder(
+                  builder: (context, child) => Opacity(
+                    opacity: animationController.value,
+                    child: Container(
+                      width: 140,
+                      height: 140,
+                      decoration: BoxDecoration(
+                          color: Colors.lightGreenAccent,
+                          borderRadius: BorderRadius.circular(16)),
+                    ),
+                  ),
+                  animation: animationController,
                 ),
               ],
             ),
@@ -166,17 +186,16 @@ class _MyHomePageState extends State<MyHomePage> {
             backgroundColor: Colors.amber,
             onPressed: () {
               setState(() {
-
-                if(top < 350){
-                  top += 50 ;
-                }else{
-                  top = 0 ;
+                if (top < 350) {
+                  top += 50;
+                } else {
+                  top = 0;
                 }
 
-                if(left < 150){
-                  left += 50 ;
-                }else{
-                  left -= 50 ;
+                if (left < 150) {
+                  left += 50;
+                } else {
+                  left -= 50;
                 }
               });
             },
@@ -186,7 +205,7 @@ class _MyHomePageState extends State<MyHomePage> {
             backgroundColor: Colors.deepOrange,
             onPressed: () {
               setState(() {
-                turns += 1 ;
+                turns += 1;
               });
             },
             label: const Text('Rotate Animation'),
@@ -195,15 +214,25 @@ class _MyHomePageState extends State<MyHomePage> {
             backgroundColor: Colors.purple,
             onPressed: () {
               setState(() {
-                if(scale < 2){
-                scale += 0.2 ;
-
-                }else{
-                  scale = 0.2 ;
+                if (scale < 2) {
+                  scale += 0.2;
+                } else {
+                  scale = 0.2;
                 }
               });
             },
             label: const Text('Scale Animation'),
+          ),
+          FloatingActionButton.extended(
+            backgroundColor: Colors.lightGreenAccent,
+            onPressed: () {
+              if (!animationController.isCompleted) {
+                animationController.forward();
+              } else {
+                animationController.reverse();
+              }
+            },
+            label: const Text('Opacity using Animation Controller'),
           ),
         ],
       ), // This trailing comma makes auto-formatting nicer for build methods.
