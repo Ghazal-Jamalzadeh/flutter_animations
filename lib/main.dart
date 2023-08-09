@@ -53,8 +53,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
   //transition
   double top = 0;
-
   double left = 0;
+
+  //rotate
+  double turns = 1 ;
 
   @override
   Widget build(BuildContext context) {
@@ -106,6 +108,20 @@ class _MyHomePageState extends State<MyHomePage> {
                           ))
                     ],
                   ),
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                AnimatedRotation(
+                  duration: Duration(seconds: 1),
+                  turns: turns,
+                  child: Container(
+                    width: 140,
+                    height: 140,
+                    decoration: BoxDecoration(
+                        color: Colors.deepOrange,
+                        borderRadius: BorderRadius.circular(16)),
+                  ),
                 )
               ],
             ),
@@ -144,6 +160,15 @@ class _MyHomePageState extends State<MyHomePage> {
               });
             },
             label: const Text('Transaction Animation'),
+          ),
+          FloatingActionButton.extended(
+            backgroundColor: Colors.deepOrange,
+            onPressed: () {
+              setState(() {
+                turns += 1 ;
+              });
+            },
+            label: const Text('Rotate Animation'),
           ),
         ],
       ), // This trailing comma makes auto-formatting nicer for build methods.
