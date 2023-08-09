@@ -58,6 +58,9 @@ class _MyHomePageState extends State<MyHomePage> {
   //rotate
   double turns = 1 ;
 
+  //scale
+  double scale = 1 ;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -76,6 +79,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 const SizedBox(
                   height: 16,
                 ),
+                /* Opacity Animation */
                 AnimatedOpacity(
                     duration: Duration(seconds: 1),
                     opacity: opacity,
@@ -89,6 +93,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 const SizedBox(
                   height: 16,
                 ),
+                /* Transition Animation */
                 SizedBox(
                   width: double.infinity,
                   height: 500,
@@ -112,6 +117,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 const SizedBox(
                   height: 16,
                 ),
+                /* Rotate Animation */
                 AnimatedRotation(
                   duration: Duration(seconds: 1),
                   turns: turns,
@@ -122,7 +128,22 @@ class _MyHomePageState extends State<MyHomePage> {
                         color: Colors.deepOrange,
                         borderRadius: BorderRadius.circular(16)),
                   ),
-                )
+                ) ,
+                const SizedBox(
+                  height: 16,
+                ),
+                /* Scale Animation */
+                AnimatedScale(
+                  duration: const Duration(seconds: 1),
+                  scale: scale,
+                  child: Container(
+                    width: 140,
+                    height: 140,
+                    decoration: BoxDecoration(
+                        color: Colors.purple,
+                        borderRadius: BorderRadius.circular(16)),
+                  ),
+                ),
               ],
             ),
           ),
@@ -169,6 +190,20 @@ class _MyHomePageState extends State<MyHomePage> {
               });
             },
             label: const Text('Rotate Animation'),
+          ),
+          FloatingActionButton.extended(
+            backgroundColor: Colors.purple,
+            onPressed: () {
+              setState(() {
+                if(scale < 2){
+                scale += 0.2 ;
+
+                }else{
+                  scale = 0.2 ;
+                }
+              });
+            },
+            label: const Text('Scale Animation'),
           ),
         ],
       ), // This trailing comma makes auto-formatting nicer for build methods.
