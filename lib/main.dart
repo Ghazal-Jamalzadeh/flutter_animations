@@ -48,38 +48,104 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  //fade out
+  double opacity = 1;
 
-  double opacity = 1 ;
+  //transition
+  double top = 0;
+
+  double left = 0;
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: SizedBox(
-        width: double.infinity,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const SizedBox(height: 16,) ,
-            AnimatedOpacity(
-              duration: Duration(seconds: 1) ,
-                opacity: opacity,
-                child: Container(width: 140 , height: 140 , decoration: BoxDecoration(color: Colors.teal , borderRadius: BorderRadius.circular(16)), ))
-          ],
+      body: SingleChildScrollView(
+        child: SizedBox(
+          width: double.infinity,
+          child: Padding(
+            padding: EdgeInsets.only(left: 16),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(
+                  height: 16,
+                ),
+                AnimatedOpacity(
+                    duration: Duration(seconds: 1),
+                    opacity: opacity,
+                    child: Container(
+                      width: 140,
+                      height: 140,
+                      decoration: BoxDecoration(
+                          color: Colors.teal,
+                          borderRadius: BorderRadius.circular(16)),
+                    )),
+                const SizedBox(
+                  height: 16,
+                ),
+                SizedBox(
+                  width: double.infinity,
+                  height: 500,
+                  child: Stack(
+                    children: [
+                      AnimatedPositioned(
+                          top: top,
+                          left: left,
+                          curve: Curves.decelerate,
+                          duration: const Duration(seconds: 1),
+                          child: Container(
+                            width: 140,
+                            height: 140,
+                            decoration: BoxDecoration(
+                                color: Colors.amber,
+                                borderRadius: BorderRadius.circular(16)),
+                          ))
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
         ),
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: Colors.teal,
-        onPressed: (){
-          setState(() {
-            opacity = opacity == 1 ? 0 : 1 ;
-          });
-        },
-        tooltip: 'Increment',
-        label: const Text('Fade Out Animation'),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          FloatingActionButton.extended(
+            backgroundColor: Colors.teal,
+            onPressed: () {
+              setState(() {
+                opacity = opacity == 1 ? 0 : 1;
+              });
+            },
+            label: const Text('Fade Out Animation'),
+          ),
+          FloatingActionButton.extended(
+            backgroundColor: Colors.amber,
+            onPressed: () {
+              setState(() {
+
+                if(top < 350){
+                  top += 50 ;
+                }else{
+                  top = 0 ;
+                }
+
+                if(left < 150){
+                  left += 50 ;
+                }else{
+                  left -= 50 ;
+                }
+              });
+            },
+            label: const Text('Transaction Animation'),
+          ),
+        ],
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
