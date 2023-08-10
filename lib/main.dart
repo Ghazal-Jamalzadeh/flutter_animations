@@ -58,6 +58,11 @@ class _MyHomePageState extends State<MyHomePage>
     super.initState();
   }*/
 
+  // color + scale + opacity
+  late final Animation<Color?> colorTween = ColorTween(begin: Colors.pinkAccent , end: Colors.black).animate(animationController);
+  late final Animation<double> opacityTween = Tween<double>(begin: 1.0 , end: 0.5).animate(animationController);
+  late final Animation<double> scaleTween = Tween<double>(begin: 1.0 , end: 0.5).animate(CurvedAnimation(parent: animationController, curve: Curves.bounceIn));
+
   @override
   void dispose() {
     animationController.dispose();
@@ -164,6 +169,26 @@ class _MyHomePageState extends State<MyHomePage>
                   ),
                   animation: animationController,
                 ),
+                const SizedBox(
+                  height: 16,
+                ),
+                 /* color + scale + opacity */
+                AnimatedBuilder(
+                  animation: animationController,
+                  builder: (context, child) => Opacity(
+                    opacity: opacityTween.value,
+                    child: Container(
+                      width: 140 * scaleTween.value,
+                      height: 140 * scaleTween.value,
+                      decoration: BoxDecoration(
+                          color: colorTween.value,
+                          borderRadius: BorderRadius.circular(16)),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
               ],
             ),
           ),
@@ -233,6 +258,18 @@ class _MyHomePageState extends State<MyHomePage>
               }
             },
             label: const Text('Opacity using Animation Controller'),
+          ),
+
+          FloatingActionButton.extended(
+            backgroundColor: Colors.pinkAccent,
+            onPressed: () {
+              if (!animationController.isCompleted) {
+                animationController.forward();
+              } else {
+                animationController.reverse();
+              }
+            },
+            label: const Text('Color + Scale + Opacity'),
           ),
         ],
       ), // This trailing comma makes auto-formatting nicer for build methods.
